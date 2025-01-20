@@ -70,8 +70,8 @@
   async function startCountdown() {
     const initialTime = await fetchUniversalTime();
 
-    setInterval(async () => {
-      const currentTime = new Date(initialTime.getTime() + (Date.now() - initialTime.getTime())); // Adjust for real-time updates
+    setInterval(() => {
+      const currentTime = new Date(); // Use local real-time
       const timeRemaining = birthdayDate - currentTime;
 
       if (timeRemaining <= 0) {
@@ -79,9 +79,10 @@
         return;
       }
 
-      const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+      const totalSeconds = Math.floor(timeRemaining / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
 
       timerElement.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       messageElement.innerHTML = "Come back when the timer hits 0!";
