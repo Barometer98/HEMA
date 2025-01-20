@@ -38,6 +38,16 @@
       color: #444;
     }
 
+    #test-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #FFD700;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
     @keyframes confetti {
       0% {transform: rotate(0deg);}
       100% {transform: rotate(360deg);}
@@ -116,6 +126,7 @@
   <div class="pineapple">🍍</div>
   <div class="pineapple">🍍</div>
   <div class="pineapple">🍍</div>
+  <button id="test-button">Test Timer</button>
 </div>
 
 <script>
@@ -123,6 +134,7 @@
   const timerElement = document.getElementById("timer");
   const messageElement = document.getElementById("message");
   const subMessageElement = document.getElementById("sub-message");
+  const testButton = document.getElementById("test-button");
 
   function fetchUniversalTime() {
     return fetch('https://worldtimeapi.org/api/timezone/Etc/UTC')
@@ -174,6 +186,28 @@
       confettiContainer.appendChild(confettiPiece);
     }
   }
+
+  testButton.addEventListener("click", () => {
+    const testDate = new Date(Date.now() + 10000); // 10 seconds from now
+    const interval = setInterval(() => {
+      const currentTime = new Date();
+      const timeRemaining = testDate - currentTime;
+
+      if (timeRemaining <= 0) {
+        clearInterval(interval);
+        displayBirthdayMessage();
+        return;
+      }
+
+      const totalSeconds = Math.floor(timeRemaining / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      timerElement.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      messageElement.innerHTML = "Testing: Come back when the timer hits 0!";
+    }, 1000);
+  });
 
   startCountdown();
 </script>
