@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: yellow;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #timer {
+      font-family: 'Courier New', monospace;
+      font-size: 3em;
+      margin: 20% auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 15px;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #message {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    @keyframes confetti {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-image: url('pineapple.png');
+      background-size: cover;
+      animation: confetti 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div id="content">
+  <div id="timer"></div>
+  <div id="message"></div>
+</div>
+
+<script>
+  const birthdayDate = new Date("2025-01-22T00:00:00Z");
+  const timerElement = document.getElementById("timer");
+  const messageElement = document.getElementById("message");
+
+  function fetchUniversalTime() {
+    return fetch('https://worldtimeapi.org/api/timezone/Etc/UTC')
+      .then(response => response.json())
+      .then(data => new Date(data.utc_datetime));
+  }
+
+  function startCountdown() {
+    setInterval(async () => {
+      const currentTime = await fetchUniversalTime();
+      const timeRemaining = birthdayDate - currentTime;
+
+      if (timeRemaining <= 0) {
+        displayBirthdayMessage();
+      } else {
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        timerElement.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        messageElement.innerHTML = "Come back when the timer hits 0!";
+      }
+    }, 1000);
+  }
+
+  function displayBirthdayMessage() {
+    document.body.innerHTML = `
+      <h1 style="font-size: 4em;">Happy Birthday!</h1>
+      <p style="font-size: 1.5em;">I hope your day is as amazing as you are!</p>
+      <p style="font-size: 1em;">I wanted to make sure I wished you exactly, but I had no way of contacting you.</p>
+    `;
+    startConfetti();
+  }
+
+  function startConfetti() {
+    for (let i = 0; i < 100; i++) {
+      const confetti = document.createElement("div");
+      confetti.className = "confetti";
+      confetti.style.left = `${Math.random() * 100}%`;
+      confetti.style.top = `${Math.random() * 100}%`;
+      confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      document.body.appendChild(confetti);
+    }
+  }
+
+  startCountdown();
+</script>
+</body>
+</html>
