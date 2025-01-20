@@ -12,6 +12,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       overflow: hidden;
+      color: black;
     }
 
     #timer {
@@ -23,11 +24,13 @@
       border-radius: 15px;
       display: inline-block;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      color: black;
     }
 
     #message {
       font-size: 2em;
       margin-top: 20px;
+      color: black;
     }
 
     @keyframes confetti {
@@ -48,7 +51,7 @@
 <body>
 
 <div id="content">
-  <div id="timer"></div>
+  <div id="timer">Loading...</div>
   <div id="message"></div>
 </div>
 
@@ -65,7 +68,7 @@
 
   function startCountdown() {
     setInterval(async () => {
-      const currentTime = await fetchUniversalTime();
+      const currentTime = await fetchUniversalTime().catch(() => new Date());
       const timeRemaining = birthdayDate - currentTime;
 
       if (timeRemaining <= 0) {
