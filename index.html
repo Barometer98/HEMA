@@ -53,12 +53,14 @@
 <div id="content">
   <div id="timer">Loading...</div>
   <div id="message"></div>
+  <button id="testButton">Test Countdown</button>
 </div>
 
 <script>
   const birthdayDate = new Date("2025-01-22T00:00:00Z"); // Set target date in UTC
   const timerElement = document.getElementById("timer");
   const messageElement = document.getElementById("message");
+  const testButton = document.getElementById("testButton");
 
   function fetchUniversalTime() {
     return fetch('https://worldtimeapi.org/api/timezone/Etc/UTC')
@@ -108,6 +110,13 @@
       document.body.appendChild(confetti);
     }
   }
+
+  testButton.addEventListener("click", () => {
+    // For testing, set the birthdayDate to 10 seconds from now
+    birthdayDate.setTime(Date.now() + 10000);
+    messageElement.innerHTML = "Testing mode activated. Countdown set to 10 seconds.";
+    startCountdown();
+  });
 
   startCountdown();
 </script>
